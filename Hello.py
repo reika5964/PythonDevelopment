@@ -1,34 +1,24 @@
 from flask import Flask,render_template,request,redirect,url_for
-import pymysql
+from flask_wtf import FlaskForm
+from wtforms import TextAreaField,SubmitField
 
 app = Flask(__name__)
-conn=pymysql.connect(host='localhost',user='root',password='',database='studentdb')
+app.config['SECRET_KEY'] = 'mykey'
 
+class MyForm(FlaskForm):  
+    name = TextAreaField("名前：")
+    submit = SubmitField("送信") 
 
-@app.route("/")
-def showdata():
-    with conn:
-        cur=conn.cursor()
-        cur.execute("select * from student")
-        rows=cur.fetchall()
-        return render_template('index.html',datas=rows)
+@app.route("/",methods=['GET','POST'])
+def index():
+    name=()
+    form = MyForm() 
+    if form.validate_on_submit():
+         name = form.name.data
+         form.name.data = ""
 
-@app.route("/student")
-def showfrom():
-        return render_template('addstudent.html')
-
-@app.route("/insert",methods=['POST'])
-def insert():
-    if request.method == 'POST':
-        id = str(request.form.get('id'))
-        fname = str(request.form.get('fname'))
-        lname  = str(request.form.get('lname'))  
-        phone  = str(request.form.get('phone'))
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO `student` (`id`,`fname`, `lname`, `phone`) VALUES (`{id}`,`{fname}`,`{lname}`,`{phone}`);".format(id=id,fname=fname,lname=lname,phone=phone))
-        conn.commit()
-        return redirect(url_for('showdata'))
-            
-
-if __name__ == "__main__":
+    return render_template('index.html',form=form,name=name) 
+  
+if __name__ == "__main__":  
     app.run(debug=True)
+
