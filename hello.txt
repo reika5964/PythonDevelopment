@@ -1,0 +1,24 @@
+<form action="" method="POST">
+          {{form.hidden_tag()}}
+          <div class="form-group">
+            {{form.name.label}}
+            {{form.name()}}
+            <br>
+            <!-- Boolean Field -->
+             {{form.isAccept()}}{{form.isAccept.label}}
+            <br>
+            <!-- Radio -->
+            {{form.gender.label}}{{form.gender()}}
+            <br>
+            <!-- Select -->
+            {{form.skill.label}}{{form.skill()}}
+          </div>
+          <div class="form-group">
+            {{form.address.label}}
+            {{form.address()}}
+          </div>
+          <div class="from-group m-2">
+            {{form.submit()}}
+          </div>
+      </form>
+      <hr>
